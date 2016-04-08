@@ -13,15 +13,23 @@ public class DHT11 implements ISensor{
 
     private Number temperature;
     private Number humidity;
+    private int tempSensorID;
+   private int humiditySensorID;
+
 
     private int[] dht11_dat = {0, 0, 0, 0, 0};
 
     public DHT11() {
     }
+    
+      public DHT11(int tempSensorID, int humiditySensorID) {
+          this.tempSensorID = tempSensorID;
+          this.humiditySensorID = humiditySensorID;
+    }
 
     @Override
     public Number loadData() {
-  String cmd = "sudo python /home/pi/AdafruitDHT.py 11 4";
+  String cmd = "sudo python /home/pi/AdafruitDHT.py 11 17";
         String ret = "";
         String output = "";
 
@@ -82,5 +90,23 @@ public class DHT11 implements ISensor{
     public void setTemperature(Number temperature) {
         this.temperature = temperature;
     }
+
+    public int getTempSensorID() {
+        return tempSensorID;
+    }
+
+    public void setTempSensorID(int tempSensorID) {
+        this.tempSensorID = tempSensorID;
+    }
+
+    public int getHumiditySensorID() {
+        return humiditySensorID;
+    }
+
+    public void setHumiditySensorID(int humiditySensorID) {
+        this.humiditySensorID = humiditySensorID;
+    }
+    
+    
     
 }

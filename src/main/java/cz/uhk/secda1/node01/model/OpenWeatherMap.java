@@ -10,6 +10,7 @@ package cz.uhk.secda1.node01.model;
  * @author David
  */
 public class OpenWeatherMap {
+
     private String name;
     private OpenWeatherMapTemp temperature;
     private OpenWeatherMapWind wind;
@@ -24,7 +25,6 @@ public class OpenWeatherMap {
 
     public OpenWeatherMap() {
     }
-    
 
     public void setName(String name) {
         this.name = name;
@@ -57,8 +57,18 @@ public class OpenWeatherMap {
     public OpenWeatherMapWind getWind() {
         return wind;
     }
-    
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "[WIND]:" + wind.speed + "[LOC]:" + name + "[TEMP]:" + temperature.temp + "[SKY]:" + sky.main;//To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean canOpenWindow() {
+        if (sky.main.equals("Clear") && temperature.temp_min >= 20) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

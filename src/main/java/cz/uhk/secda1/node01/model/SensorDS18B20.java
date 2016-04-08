@@ -16,10 +16,14 @@ public class SensorDS18B20 implements ISensor {
 
     private final File sensorFile;
     private final File valueFile;
+    private int SensorID;
+    private Number value;
+    
 
-    public SensorDS18B20(String sensorFolder) {
+    public SensorDS18B20(String sensorFolder, int sensorID) {
         this.sensorFile = new File("/sys/devices/w1_bus_master1/" + sensorFolder);
         this.valueFile = deriveValueFile(sensorFile);
+        this.SensorID = sensorID;
     }
 
     /**
@@ -46,7 +50,8 @@ public class SensorDS18B20 implements ISensor {
         } catch (IOException ex) {
             Logger.getLogger(SensorDS18B20.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return val;
+        setValue(val);
+        return value;
     }
 
     public String getUnitString(){
@@ -57,6 +62,7 @@ public class SensorDS18B20 implements ISensor {
         } catch (Exception e) {
             valStr = "Could not read sensor data of "+ sensorFile.getPath();
         }
+        
         return valStr;
     }
 
@@ -64,4 +70,21 @@ public class SensorDS18B20 implements ISensor {
         return new File(sensorFile, "w1_slave");
     }
 
+    public int getSensorID() {
+        return SensorID;
+    }
+
+    public void setSensorID(int SensorID) {
+        this.SensorID = SensorID;
+    }
+
+    public Number getValue() {
+        return value;
+    }
+
+    public void setValue(Number value) {
+        this.value = value;
+    }
+    
+    
 }

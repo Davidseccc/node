@@ -70,5 +70,12 @@ public class OpenWeatherMapTemp {
         this.temp_min = temp_min;
     }
     
+    	// A method that converts temperature from Celsius degrees to Fahrenheit
+	String getTemperatureInFahrenheit() {
+		float temp = 32 + (this.temp * 9 / 5);
+		return String.format("%.2f", temp);
+	}
+ 
+
     
 }

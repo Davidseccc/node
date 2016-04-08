@@ -48,5 +48,6 @@ dependencies {
     compile 'mysql:mysql-connector-java:5.1.6'
     compile 'org.jasypt:jasypt:1.9.2'
     compile 'com.pi4j:pi4j-core:1.0'
+    compile 'com.pi4j:pi4j-device:1.0'
     compile 'com.google.code.gson:gson:2.6.2'
 }

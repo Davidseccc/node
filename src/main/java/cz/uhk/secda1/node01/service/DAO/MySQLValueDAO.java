@@ -1,5 +1,7 @@
-package cz.uhk.secda1.node01.service;
+package cz.uhk.secda1.node01.service.DAO;
 
+import cz.uhk.secda1.node01.model.DHT11;
+import cz.uhk.secda1.node01.model.SensorDS18B20;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -9,23 +11,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 import java.util.Properties;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.properties.EncryptableProperties;
 
-public class MySQLConnector {
+public class MySQLValueDAO {
 
     private Connection connect = null;
     private Statement statement = null;
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
 
-    public static final String ENC_PASSWORD = "KdhA4xXdcMmHLmp"; //salt to encript passwort to DB
+    public static final String ENC_PASSWORD = "KdhA4xXdcMmHLmp"; //salt to encript password to DB
         public static final String CONFIG_PATH = "/home/pi/"; //path to config file
 
 
-    private void initDB() throws SQLException, ClassNotFoundException, IOException {
+    public void initDB() throws SQLException, ClassNotFoundException, IOException {
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
         encryptor.setPassword(ENC_PASSWORD);   
         URL res;
@@ -42,7 +43,7 @@ public class MySQLConnector {
                         + "?user=" + user + "&password=" + password);
     }
 
-    public void readDataBase() throws Exception {
+    public void insertValue(float value, int sensor_ID) throws Exception {
 
         try {
             initDB();
@@ -52,15 +53,11 @@ public class MySQLConnector {
             
             // Result set get the result of the SQL query
             preparedStatement = connect
-                    .prepareStatement("insert into  feedback.comments values (default, ?, ?, ?, ? , ?, ?)");
+                    .prepareStatement("CALL insertValuetoNode( ? , ? );");
             // "myuser, webpage, datum, summery, COMMENTS from feedback.comments");
             // Parameters start with 1
-            preparedStatement.setString(1, "Test");
-            preparedStatement.setString(2, "TestEmail");
-            preparedStatement.setString(3, "TestWebpage");
-            preparedStatement.setDate(4, new java.sql.Date(2009, 12, 11));
-            preparedStatement.setString(5, "TestSummary");
-            preparedStatement.setString(6, "TestComment");
+            preparedStatement.setFloat(1, value);
+            preparedStatement.setInt(2, sensor_ID);
             preparedStatement.executeUpdate();
 
         } catch (Exception e) {
@@ -72,7 +69,7 @@ public class MySQLConnector {
     }
     
     // You need to close the resultSet
-    private void close() {
+    public void close() {
         try {
             if (resultSet != null) {
                 resultSet.close();

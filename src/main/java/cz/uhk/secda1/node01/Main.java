@@ -1,5 +1,6 @@
 package cz.uhk.secda1.node01;
 
+import cz.uhk.secda1.node01.model.RelayBoard;
 import cz.uhk.secda1.node01.service.SocketServer;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class Main {
-    
+        
     public static final int PORT = 9999;
 
     public static void main(String[] args) throws Exception {
@@ -30,8 +31,9 @@ public class Main {
                 .newTrigger()
                 .withIdentity("MyTrigger", "group1")
                 .withSchedule(
-                        CronScheduleBuilder.cronSchedule("0/10 * * 1/1 * ? *"))
-                        //CronScheduleBuilder.cronSchedule("0 0/10 * * * ? *"))
+                        //CronScheduleBuilder.cronSchedule("0/20 * * 1/1 * ? *"))
+                        CronScheduleBuilder.cronSchedule("0 0/10 * * * ? *"))
+                        //CronScheduleBuilder.cronSchedule("0 0/1 * * * ? *"))
                 .build();
 
         Scheduler scheduler = new StdSchedulerFactory().getScheduler();

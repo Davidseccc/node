@@ -11,6 +11,9 @@ package cz.uhk.secda1.node01.model;
  */
 public class OpenWeatherMapSky {
 
+    private static final String ICON_ADDR = "http://openweathermap.org/img/w/";
+
+    
     int id;
     String main;
     String description;
@@ -55,5 +58,9 @@ public class OpenWeatherMapSky {
         this.main = main;
     }
     
-    
+    	// getIconAddress concatenates the base address and the specific code for
+	// the icon
+	public String getIconAddress() {
+		return ICON_ADDR + this.icon + ".png";
+	}
 }

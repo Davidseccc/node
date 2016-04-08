@@ -42,10 +42,10 @@ public class SocketServer extends Thread {
                         = new DataOutputStream(server.getOutputStream());
 
                 String message = resolveMessage(messString);
-                
+
                 out.writeUTF(message);
                 System.out.println("SEND: " + message);
-                
+
             } catch (SocketTimeoutException s) {
                 System.out.println("Socket timed out!");
                 break;
@@ -60,15 +60,29 @@ public class SocketServer extends Thread {
         if (messString.equalsIgnoreCase("Hi, What's the Date Today?")) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
-            message = "Hi, it is " + dateFormat.format(cal.getTime()) + ".";
+            return message = "Hi, it is " + dateFormat.format(cal.getTime()) + ".";
 
         }
-        else{ message = "Nothing to do...";}
+        if (messString.equalsIgnoreCase("RELAY_ON")) {
+            ControlGpioExample relay = new ControlGpioExample();
+            relay.switchOn();
+            return message = "Relay Switched ON";
+
+        }
+        if (messString.equalsIgnoreCase("RELAY_OFF")) {
+            ControlGpioExample relay = new ControlGpioExample();
+            relay.switchOff();
+            return message = "Relay Switched OFF";
+
+        } 
+        else {
+            return message = "Nothing to do...";
+        }
 
         //out.writeUTF("Thank you for connecting to "
         // + server.getLocalSocketAddress() + "\nGoodbye!");
         //server.close();
-        return message;
+        //return message;
 
     }
 
