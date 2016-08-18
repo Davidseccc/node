@@ -1,13 +1,6 @@
 package cz.uhk.secda1.node01;
 
-import cz.uhk.secda1.node01.model.RelayBoard;
 import cz.uhk.secda1.node01.service.SocketServer;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Properties;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.properties.EncryptableProperties;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -15,6 +8,12 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+
+/**
+ * Node main runnable class.
+ *
+ * @author Šec David
+ */
 
 public class Main {
         
@@ -24,16 +23,16 @@ public class Main {
 
         (new Thread(new SocketServer(PORT, SocketServer.TIMEOUT_NEWER))).start();
 
-        JobDetail job = JobBuilder.newJob(TimmedJob.class)
-                .withIdentity("MyJob", "group1").build();
+        JobDetail job = JobBuilder.newJob(TimmedJobNode1.class)   //Specify node timed job...
+                .withIdentity("Job", "Measurement").build();
 
         Trigger trigger = TriggerBuilder
                 .newTrigger()
-                .withIdentity("MyTrigger", "group1")
+                .withIdentity("Trigger", "Measurement")
                 .withSchedule(
-                        //CronScheduleBuilder.cronSchedule("0/20 * * 1/1 * ? *"))
-                        CronScheduleBuilder.cronSchedule("0 0/10 * * * ? *"))
-                        //CronScheduleBuilder.cronSchedule("0 0/1 * * * ? *"))
+                        CronScheduleBuilder.cronSchedule("0 0/10 * * * ? *")) // every 10 minutes
+                        //CronScheduleBuilder.cronSchedule("0/20 * * 1/1 * ? *")) // every 20 minutes
+                        //CronScheduleBuilder.cronSchedule("0 0/1 * * * ? *")) // every minute
                 .build();
 
         Scheduler scheduler = new StdSchedulerFactory().getScheduler();

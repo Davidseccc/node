@@ -11,13 +11,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.script.ScriptException;
 
-public class ControlGpioExample {
+/**
+ * GPIO controll.
+ *
+ * @author Šec David
+ */
+public class ControllGpio {
 
     public static final String ON_SCRIPT = "on.py";
     public static final String OFF_SCRIPT = "off.py";
     public static final String SCRIPTS_PATH = "/home/pi/";
 
-    public ControlGpioExample() {
+    public ControllGpio() {
 
     }
 
@@ -29,6 +34,12 @@ public class ControlGpioExample {
         execCommand(OFF_SCRIPT);
     }
 
+
+    /*
+    *  Execition python script to switch on/off relay 
+    *  @params: name - Python script name
+    *   
+    */
     private void execCommand(String name) {
         String cmd = "python " + SCRIPTS_PATH + name;
         String ret = "";

@@ -8,9 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * DS18B20 type temperature sensor.
+ * DS18B20 temperature sensor.
  *
- * @author Marcus Hirt
+ * @author Šec David
  */
 public class SensorDS18B20 implements ISensor {
 
@@ -18,7 +18,6 @@ public class SensorDS18B20 implements ISensor {
     private final File valueFile;
     private int SensorID;
     private Number value;
-    
 
     public SensorDS18B20(String sensorFolder, int sensorID) {
         this.sensorFile = new File("/sys/devices/w1_bus_master1/" + sensorFolder);
@@ -30,6 +29,12 @@ public class SensorDS18B20 implements ISensor {
      *
      */
     @Override
+    /**
+     * DS18B20 temperature sensor. Load data from sensor using read line with
+     * temperature after "t=" from file specified in sensrFile Constrictor.
+     * Readed value is divided by 1000. return Number value [in °C];
+     *
+     */
     public Number loadData() {
         Number val = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(
@@ -54,15 +59,15 @@ public class SensorDS18B20 implements ISensor {
         return value;
     }
 
-    public String getUnitString(){
+    public String getUnitString() {
         String valStr;
         try {
             double val = loadData().doubleValue();
             valStr = val + "°C";
         } catch (Exception e) {
-            valStr = "Could not read sensor data of "+ sensorFile.getPath();
+            valStr = "Could not read sensor data of " + sensorFile.getPath();
         }
-        
+
         return valStr;
     }
 
@@ -85,6 +90,5 @@ public class SensorDS18B20 implements ISensor {
     public void setValue(Number value) {
         this.value = value;
     }
-    
-    
+
 }

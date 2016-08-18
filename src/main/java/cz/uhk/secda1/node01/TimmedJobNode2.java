@@ -4,7 +4,7 @@ import cz.uhk.secda1.node01.model.CPU;
 import cz.uhk.secda1.node01.model.DHT11;
 import cz.uhk.secda1.node01.model.OpenWeatherMap;
 import cz.uhk.secda1.node01.model.SensorDS18B20;
-import cz.uhk.secda1.node01.service.ControlGpioExample;
+import cz.uhk.secda1.node01.service.ControllGpio;
 import cz.uhk.secda1.node01.service.DAO.CPUDAO;
 import cz.uhk.secda1.node01.service.DAO.SensorDHT11DAO;
 import cz.uhk.secda1.node01.service.DAO.SensorDS18B20DAO;
@@ -18,7 +18,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class TimmedJob implements Job {
+public class TimmedJobNode2 implements Job {
 
     @Override
     public void execute(JobExecutionContext context)
@@ -28,36 +28,12 @@ public class TimmedJob implements Job {
             Calendar cal = Calendar.getInstance();
             System.out.println("\n New Thread started:  " + dateFormat.format(cal.getTime()));
 
-            //execNode01();
-
             execNode02();
 
-            //execNode03();
-
         } catch (Exception ex) {
-            Logger.getLogger(TimmedJob.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TimmedJobNode2.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-    
-    private void execNode01() throws Exception {
-        //NODE_01
-        CPU cpu = new CPU(1);
-        cpu.getCPUTemp();
-        System.out.println("CPU Temp:" + cpu.getCPUTemp().toString() + "°C");
-        CPUDAO cpudao = new CPUDAO();
-        cpudao.insertValue(cpu);
-
-        SensorDS18B20 s18B20 = new SensorDS18B20("28-000005e526d7", 4);
-        System.out.println(s18B20.getUnitString());
-        SensorDS18B20DAO s18B20DAO = new SensorDS18B20DAO();
-        try {
-            s18B20DAO.insertValue(s18B20);
-
-        } catch (Exception ex) {
-            Logger.getLogger(TimmedJob.class.getName()).log(Level.SEVERE,
-                    null, ex);
-        }
     }
 
     private void execNode02() throws Exception {
@@ -74,11 +50,11 @@ public class TimmedJob implements Job {
         try {
             s18B20DAO.insertValue(s18B20);
         } catch (Exception ex) {
-            Logger.getLogger(TimmedJob.class.getName()).log(Level.SEVERE,
+            Logger.getLogger(TimmedJobNode2.class.getName()).log(Level.SEVERE,
                     null, ex);
         }
 
-        DHT11 sensor = new DHT11(5, 6);
+        DHT11 sensor = new DHT11(5, 6, 22, 17);
         sensor.loadData();
         System.out.println("Done!! " + sensor.getUnitString() + " "
                 + sensor.getHumidityString());
@@ -86,29 +62,8 @@ public class TimmedJob implements Job {
         try {
             sdhtdao.insertValue(sensor);
         } catch (Exception ex) {
-            Logger.getLogger(TimmedJob.class.getName()).log(Level.SEVERE,
+            Logger.getLogger(TimmedJobNode2.class.getName()).log(Level.SEVERE,
                     null, ex);
-        }
-    }
-
-    private void execNode03() throws Exception {
-        //NODE_03
-        CPU cpu = new CPU(3);
-        cpu.getCPUTemp();
-        System.out.println("CPU Temp:" + cpu.getCPUTemp().toString() + "°C");
-        CPUDAO cpudao = new CPUDAO();
-        cpudao.insertValue(cpu);
-
-        OpenWeatherMapParser weatherParser = new OpenWeatherMapParser();
-        OpenWeatherMap wm = weatherParser.parse();
-        System.out.println(wm.toString());
-        ControlGpioExample windowRelay = new ControlGpioExample();
-
-        if (wm.canOpenWindow()) {
-            windowRelay.switchOn();
-        } else {
-            windowRelay.switchOff();
-
         }
     }
 

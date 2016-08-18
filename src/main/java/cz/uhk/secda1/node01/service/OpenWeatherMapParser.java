@@ -33,6 +33,11 @@ public class OpenWeatherMapParser {
     public static final String API_KEY = "745cb134b32dc06fcd2457d8d62b6c1d";
     public static final String LOCATION = "Pravy";
 
+    /**
+ * Parse data from OpenWeatherMap
+ * @return OpenWeatherMap
+ */
+    
     public OpenWeatherMap parse() {
         OpenWeatherMap ow = new OpenWeatherMap();
 
@@ -55,6 +60,11 @@ public class OpenWeatherMapParser {
         return ow;
     }
 
+    /**
+     * Parse Json String to specified Objects 
+     * @params root element
+     * @return OpenWeatherMap
+    */
     private OpenWeatherMap parseJSON(JsonElement root) throws JsonSyntaxException {
         OpenWeatherMap ow;
         JsonObject rootobj = root.getAsJsonObject();

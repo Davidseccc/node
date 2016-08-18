@@ -12,8 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
+ * Socket server class.
  *
- * @author David
+ * @author Šec David
  */
 public class SocketServer extends Thread {
 
@@ -64,13 +65,13 @@ public class SocketServer extends Thread {
 
         }
         if (messString.equalsIgnoreCase("RELAY_ON")) {
-            ControlGpioExample relay = new ControlGpioExample();
+            ControllGpio relay = new ControllGpio();
             relay.switchOn();
             return message = "Relay Switched ON";
 
         }
         if (messString.equalsIgnoreCase("RELAY_OFF")) {
-            ControlGpioExample relay = new ControlGpioExample();
+            ControllGpio relay = new ControllGpio();
             relay.switchOff();
             return message = "Relay Switched OFF";
 

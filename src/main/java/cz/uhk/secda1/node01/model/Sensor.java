@@ -18,7 +18,7 @@ public class Sensor implements ISensor{
     
     /**
      *
-     * @return
+     * @return Number
      */
     @Override
     public Number loadData() {

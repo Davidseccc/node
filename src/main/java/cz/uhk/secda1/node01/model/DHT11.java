@@ -9,27 +9,43 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class DHT11 implements ISensor{
+/**
+ * DHT11 temperature and humidity sensor.
+ *
+ * @author Šec David
+ */
+
+public class DHT11 implements ISensor {
 
     private Number temperature;
     private Number humidity;
     private int tempSensorID;
-   private int humiditySensorID;
-
+    private int humiditySensorID;
+    private int sensor;
+    private int gpioPin;
 
     private int[] dht11_dat = {0, 0, 0, 0, 0};
 
     public DHT11() {
-    }
-    
-      public DHT11(int tempSensorID, int humiditySensorID) {
-          this.tempSensorID = tempSensorID;
-          this.humiditySensorID = humiditySensorID;
+
     }
 
+    public DHT11(int tempSensorID, int humiditySensorID, int sensor, int gpioPin) {
+        this.tempSensorID = tempSensorID;
+        this.humiditySensorID = humiditySensorID;
+        this.sensor = sensor;
+        this.gpioPin = gpioPin;
+    }
+
+    /**
+     * DHT11 temperature and humidity sensor. Load data from sensor using python
+     * script which return two values. return Number value [in °C]; sensor : 11
+     * for DTH 11 or 22 for DHT22 sensor gpinPin : GPIO pin in which is sensor
+     * connected (use GPIO number no pin number)
+     */
     @Override
     public Number loadData() {
-  String cmd = "sudo python /home/pi/AdafruitDHT.py 11 17";
+        String cmd = "sudo python /home/pi/AdafruitDHT.py " + sensor + " " + gpioPin;
         String ret = "";
         String output = "";
 
@@ -45,14 +61,18 @@ public class DHT11 implements ISensor{
             System.out.println(output);
 
         } catch (IOException | InterruptedException e) {
-        }    
+        }
 
-
-    parseValue(output);
-    return this.temperature;
+        parseValue(output);
+        return this.temperature;
     }
 
-
+    /**
+     * Split and trim outut string from loadData() to two Numbers – Temaperature
+     * and Humidity. First value is temperature in °C, second humidity in %.
+     * Trim string is " " (three spaces) Could be changed in python script.
+     * @param ret String with humidity ad temperature
+     */
     public void parseValue(String ret) {
         //ret.trim();
         if (ret.length() == 0) // Library is not present
@@ -61,19 +81,18 @@ public class DHT11 implements ISensor{
         }  // Error reading the the sensor, maybe is not connected. 
         // Read completed. Parse and update the values
         String[] vals = ret.split("   ");
-        setTemperature( Float.parseFloat(vals[0].trim()));
-        setHumidity( Float.parseFloat(vals[1].trim()));
+        setTemperature(Float.parseFloat(vals[0].trim()));
+        setHumidity(Float.parseFloat(vals[1].trim()));
 
     }
-    
-    public String getUnitString(){
+
+    public String getUnitString() {
         return getTemperature() + "°C";
     }
-    
-     public String getHumidityString(){
+
+    public String getHumidityString() {
         return getHumidity() + "%";
     }
-
 
     public Number getHumidity() {
         return humidity;
@@ -106,7 +125,5 @@ public class DHT11 implements ISensor{
     public void setHumiditySensorID(int humiditySensorID) {
         this.humiditySensorID = humiditySensorID;
     }
-    
-    
-    
+
 }
